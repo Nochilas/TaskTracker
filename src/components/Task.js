@@ -1,16 +1,40 @@
-import { FaTimes } from 'react-icons/fa'
+import { FaTimes, FaPencilAlt } from 'react-icons/fa'
 
-const Task = ({ task, onDelete, onToggle }) => {
+const Task = ({
+  task,
+  editing,
+  onDelete,
+  onToggle,
+  onUpdate,
+  onUpdateOver }) => {
+  console.log(editing)
+
   return (
-    <div className={`task ${task.reminder ? 'reminder' : ''}`}
-    onDoubleClick={() => onToggle(task.id)}>
+    <div>
+      {!editing ?
+      <div className={`task ${task.reminder ? 'reminder' : ''}`}
+      onDoubleClick={() => onToggle(task.id)}>
         <h3>
-            {task.text}
-            <FaTimes style={{color: 'red', cursor: 'pointer'}}
-            onClick={() => onDelete(task.id)}
+        {task.text}
+          <div>
+            <FaPencilAlt style={{marginRight: '10px'}}
+            onClick={() => onUpdate(task)}
             />
+            <FaTimes style={{color: 'red', cursor: 'pointer'}}
+            onClick={() => onDelete(task.id)}/>
+          </div>
         </h3>
         <p>{task.day}</p>
+      </div> :
+        <>
+        <input className='taskEdit' type="text" value={task.text}
+        onChange={() => onUpdate(task)}
+        onKeyDown={() => onUpdateOver(task)}
+        />
+        <input className='taskEdit' type="text" placeholder={task.day}
+        />
+      </>
+      }
     </div>
   )
 }

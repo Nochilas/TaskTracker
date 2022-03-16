@@ -12,18 +12,27 @@ function App() {
       text: 'Doctors Appointment',
       day: 'Feb 5th at 1:30pm',
       reminder: true,
+      //For editing
+      textBeforeEdit: '',
+      editing: false,
     },
     {
       id: 2,
       text: 'Meeting at School',
       day: 'Feb 6th at 2:30pm',
       reminder: true,
+      //For editing
+      textBeforeEdit: '',
+      editing: false,
     },
     {
       id: 3,
       text: 'Food shopping',
       day: 'Feb 7th at 3:30pm',
       reminder: false,
+      //For editing
+      textBeforeEdit: '',
+      editing: false,
     },
   ])
 
@@ -37,6 +46,22 @@ function App() {
   //Delete Task
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id))
+  }
+
+  //Update Task
+  const updateTask = (task) => {
+    console.log(task.textBeforeEdit)
+    console.log(task.text)
+    task.textBeforeEdit = task.text
+    task.editing = true
+    console.log(task.editing)
+  }
+  const endUpdate = (task) => {
+    if(task.text.trim().length === 0){
+      task.title = task.textBeforeEdit
+      return
+    }
+    task.editing = false
   }
 
   //Toggle Reminder
@@ -54,7 +79,13 @@ function App() {
       {/*Shortcut for ternary operator*/}
       {showAddTask && <AddTask onAdd={addTask}/>}
       {tasks.length > 0 ? (
-        <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/>
+        <Tasks
+          tasks={tasks}
+          onDelete={deleteTask}
+          onToggle={toggleReminder}
+          onUpdate={updateTask}
+          onUpdateOver={endUpdate}
+        />
       ) : (
         'No tasks to show'
       )}
